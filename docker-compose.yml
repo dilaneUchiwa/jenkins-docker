@@ -1,0 +1,28 @@
+services:
+  jenkins-docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    restart: on-failure
+    build: 
+      context: ./
+    networks:
+      jenkins:
+    environment:
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_TLS_VERIFY=1
+    ports:
+      - "50000:50000"
+      - "8080:8080"
+    volumes:
+      - jenkins-docker-certs:/certs/client:ro
+      - jenkins-data:/var/jenkins_home
+    
+
+networks:
+  jenkins:
+    driver: bridge
+
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
